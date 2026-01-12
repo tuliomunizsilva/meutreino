@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Meu Treino</title>
 
+<link rel="manifest" href="data:application/json,{
+  &quot;name&quot;:&quot;Meu Treino&quot;,
+  &quot;short_name&quot;:&quot;Treino&quot;,
+  &quot;start_url&quot;:&quot;.&quot;,
+  &quot;display&quot;:&quot;standalone&quot;,
+  &quot;background_color&quot;:&quot;#0f172a&quot;,
+  &quot;theme_color&quot;:&quot;#0f172a&quot;
+}">
+
 <style>
 body {
   margin: 0;
@@ -30,7 +39,19 @@ h2 { color: #facc15; }
   margin: 12px 0;
 }
 
-.card img { width: 100%; border-radius: 12px; }
+iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+}
+
+input {
+  width: 48%;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  margin: 4px 1%;
+}
 
 button {
   width: 100%;
@@ -40,85 +61,80 @@ button {
   border-radius: 10px;
   margin-top: 8px;
   font-weight: bold;
-  cursor: pointer;
 }
-button.done { background: #475569; color: #cbd5e1; }
+
+.timer {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 10px;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-<h1>🏋️ Meu App de Treino</h1>
+<h1>🏋️ Meu Treino</h1>
 
 <div class="dashboard" id="dashboard"></div>
-
 <div id="treinos"></div>
 
 <script>
 const treinos = {
-  "Treino A — Ombro + Costas + Bíceps": [
+  "Segunda — Ombro + Costas + Bíceps": [
     ["Puxada na Frente","CAwf7n6Luuc"],
     ["Remada Curvada","GZbfZ033f74"],
-    ["Remada Baixa","roCP6wCXPqo"],
-    ["Desenvolvimento","qEwKCR5JCog"],
-    ["Elevação Lateral","3VcKaXpzqRo"],
-    ["Rosca Direta","kwG2ipFRgfo"],
-    ["Rosca Alternada","sAq_ocpRh_I"],
-    ["Rosca Martelo","zC3nLlEvin4"]
+    ["Rosca Direta","kwG2ipFRgfo"]
   ],
-  "Treino B — Peito + Tríceps": [
+  "Quarta — Peito + Tríceps": [
     ["Supino Reto","rT7DgCr-3pg"],
-    ["Supino Inclinado","8iPEnn-ltC8"],
-    ["Crucifixo","eozdVDA78K0"],
-    ["Crossover","taI4XduLpTk"],
-    ["Tríceps Corda","vB5OHsJ3EME"],
-    ["Tríceps Testa","d_KZxkY_0cM"],
-    ["Mergulho Banco","jox1rb5krQI"]
+    ["Tríceps Corda","vB5OHsJ3EME"]
   ],
-  "Treino C — Pernas": [
+  "Sexta — Pernas": [
     ["Agachamento Livre","SW_C1A-rejs"],
-    ["Leg Press","IZxyjW7MPJQ"],
-    ["Cadeira Extensora","YyvSfVjQeL0"],
-    ["Mesa Flexora","1Tq3QdYUuHs"],
-    ["Panturrilha em Pé","YMmgqO8Jo-k"]
+    ["Leg Press","IZxyjW7MPJQ"]
   ]
 };
 
-let progresso = JSON.parse(localStorage.getItem("progresso") || "{}");
+let dataHoje = new Date().toISOString().split("T")[0];
+let historico = JSON.parse(localStorage.getItem("historico") || "{}");
 
-function concluir(nome) {
-  progresso[nome] = true;
-  localStorage.setItem("progresso", JSON.stringify(progresso));
+function salvar(nome, serie, carga) {
+  if (!historico[dataHoje]) historico[dataHoje] = [];
+  historico[dataHoje].push({ nome, serie, carga });
+  localStorage.setItem("historico", JSON.stringify(historico));
   render();
 }
 
 function render() {
-  const treinosDiv = document.getElementById("treinos");
-  treinosDiv.innerHTML = "";
-  let total = 0, feitos = 0;
+  let total = 0;
+  document.getElementById("treinos").innerHTML = "";
 
-  for (const [titulo, exercicios] of Object.entries(treinos)) {
-    let bloco = `<div class="treino"><h2>${titulo}</h2>`;
-    exercicios.forEach(([nome, video]) => {
-      total++;
-      const done = progresso[nome];
-      if (done) feitos++;
+  for (let [dia, exs] of Object.entries(treinos)) {
+    let bloco = `<div class="treino"><h2>${dia}</h2>`;
+    exs.forEach(([nome, vid]) => {
       bloco += `
-        <div class="card">
-          <h3>${nome}</h3>
-          <img src="https://img.youtube.com/vi/${video}/hqdefault.jpg">
-          <button class="${done ? "done":""}" onclick="concluir('${nome}')">
-            ${done ? "✔ Concluído" : "✔ Concluir"}
-          </button>
-        </div>`;
+      <div class="card">
+        <h3>${nome}</h3>
+        <iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>
+        <input placeholder="Séries" id="s-${nome}">
+        <input placeholder="Carga (kg)" id="c-${nome}">
+        <button onclick="salvar('${nome}',document.getElementById('s-${nome}').value,document.getElementById('c-${nome}').value)">
+          ✔ Registrar
+        </button>
+      </div>`;
     });
     bloco += `</div>`;
-    treinosDiv.innerHTML += bloco;
+    document.getElementById("treinos").innerHTML += bloco;
   }
 
-  document.getElementById("dashboard").innerHTML =
-    `<h2>📊 Progresso</h2>
-     <p>${feitos} de ${total} exercícios concluídos</p>`;
+  let dias = Object.keys(historico).length;
+  let totalRegs = Object.values(historico).flat().length;
+
+  document.getElementById("dashboard").innerHTML = `
+    <h2>📊 Dashboard</h2>
+    <p>Dias treinados: ${dias}</p>
+    <p>Exercícios registrados: ${totalRegs}</p>
+  `;
 }
 
 render();
