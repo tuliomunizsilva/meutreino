@@ -1,177 +1,249 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Meu Treino</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meu Treino</title>
 
-  <!-- Manifest PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a" />
+<link rel="apple-touch-icon" href="icon.png">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, Arial;
-      background: linear-gradient(180deg, #020617, #0f172a);
-      color: #f1f5f9;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Arial;
+  background: linear-gradient(160deg, #020617, #0f172a);
+  color: #f1f5f9;
+}
+.container { padding: 16px; max-width: 1000px; margin: auto; }
 
-    .container {
-      padding: 16px;
-      max-width: 900px;
-      margin: auto;
-    }
+header { text-align:center; margin-bottom:20px; }
+header h1 { color:#38bdf8; }
 
-    h1 {
-      text-align: center;
-      color: #38bdf8;
-    }
+.screen { display:none; }
+.screen.active { display:block; }
 
-    .home {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+.menu button {
+  background:#1e293b;
+  color:#fff;
+  border:none;
+  padding:16px;
+  width:100%;
+  border-radius:18px;
+  margin:10px 0;
+  font-size:18px;
+}
 
-    .treino-btn {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      border: none;
-      padding: 16px;
-      border-radius: 18px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #022c22;
-      cursor: pointer;
-      box-shadow: 0 10px 20px rgba(0,0,0,.4);
-    }
+.treino { background:#1e293b; padding:16px; border-radius:20px; margin-bottom:20px; }
+.card { background:#0f172a; padding:14px; border-radius:18px; margin:14px 0; }
+.card iframe { width:100%; height:220px; border-radius:14px; }
 
-    .treino {
-      display: none;
-      margin-top: 20px;
-    }
+button {
+  padding:10px;
+  background:#22c55e;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  width:100%;
+  margin-top:6px;
+}
 
-    .card {
-      background: #1e293b;
-      padding: 14px;
-      border-radius: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 16px rgba(0,0,0,.4);
-    }
+input { width:100%; padding:8px; border-radius:10px; border:none; margin-top:6px; }
 
-    .card h3 {
-      margin: 6px 0;
-    }
+.timer { font-size:22px; text-align:center; margin:8px 0; }
 
-    iframe {
-      width: 100%;
-      height: 200px;
-      border-radius: 12px;
-    }
+.back { background:#334155; margin-bottom:12px; }
+.done { background:#16a34a !important; }
 
-    .row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
+.week { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+.day { background:#1e293b; padding:12px; border-radius:14px; text-align:center; }
 
-    .btn {
-      flex: 1;
-      background: #22c55e;
-      border: none;
-      padding: 10px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn.secondary {
-      background: #475569;
-      color: white;
-    }
-
-    .timer {
-      font-size: 20px;
-      text-align: center;
-      margin-top: 6px;
-    }
-
-    .done {
-      opacity: 0.5;
-      border: 2px solid #22c55e;
-    }
-  </style>
+.dashboard { background:#1e293b; padding:16px; border-radius:18px; margin-bottom:20px; }
+</style>
 </head>
-
 <body>
 <div class="container">
-  <h1>🏋️ Meu Treino</h1>
+<header>
+<h1>🏋️ Meu Treino</h1>
+</header>
 
-  <!-- Tela inicial -->
-  <div id="home" class="home">
-    <button class="treino-btn" onclick="abrirTreino('A')">Treino A - Costas / Bíceps</button>
-    <button class="treino-btn" onclick="abrirTreino('B')">Treino B - Peito / Tríceps</button>
-    <button class="treino-btn" onclick="abrirTreino('C')">Treino C - Pernas</button>
-  </div>
+<!-- MENU -->
+<div id="menu" class="screen active">
+<div class="menu">
+<button onclick="openTreino('A')">Treino A - Ombro + Costas + Bíceps</button>
+<button onclick="openTreino('B')">Treino B - Peito + Tríceps</button>
+<button onclick="openTreino('C')">Treino C - Pernas</button>
+<button onclick="openScreen('calendario')">📅 Calendário semanal</button>
+<button onclick="openScreen('dashboard')">📊 Evolução</button>
+</div>
+</div>
 
-  <!-- Treino A -->
-  <div id="treinoA" class="treino">
-    <h2>Treino A</h2>
+<!-- TREINO A -->
+<div id="treinoA" class="screen">
+<button class="back" onclick="openScreen('menu')">⬅ Voltar</button>
+<div class="treino">
+<h2>Treino A — Ombro + Costas + Bíceps</h2>
 
-    <div class="card" data-ex="Puxada na Frente">
-      <h3>Puxada na Frente</h3>
-      <iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" allowfullscreen></iframe>
-      <div class="timer">00:00</div>
-      <div class="row">
-        <button class="btn" onclick="startTimer(this)">⏱ Descanso</button>
-        <button class="btn secondary" onclick="toggleDone(this)">✔ Feito</button>
-      </div>
-    </div>
+<div class="card"> <h3>Puxada na Frente</h3>
+<iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" allowfullscreen></iframe>
+<input placeholder="Carga (kg)">
+<input placeholder="Séries">
+<button onclick="toggleDone(this,'Puxada na Frente')">✔ Concluir</button>
+<div class="timer" id="t1">00:00</div>
+<button onclick="startTimer('t1')">⏱ Descanso</button></div>
 
-    <div class="card" data-ex="Remada Curvada">
-      <h3>Remada Curvada</h3>
-      <iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen></iframe>
-      <div class="timer">00:00</div>
-      <div class="row">
-        <button class="btn" onclick="startTimer(this)">⏱ Descanso</button>
-        <button class="btn secondary" onclick="toggleDone(this)">✔ Feito</button>
-      </div>
-    </div>
-  </div>
+<div class="card"> <h3>Remada Curvada</h3>
+<iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen></iframe>
+<input placeholder="Carga (kg)"><input placeholder="Séries">
+<button onclick="toggleDone(this,'Remada Curvada')">✔ Concluir</button>
+<div class="timer" id="t2">00:00</div>
+<button onclick="startTimer('t2')">⏱ Descanso</button></div>
+
+<div class="card"> <h3>Remada Baixa</h3>
+<iframe src="https://www.youtube.com/embed/roCP6wCXPqo" allowfullscreen></iframe>
+<input placeholder="Carga (kg)"><input placeholder="Séries">
+<button onclick="toggleDone(this,'Remada Baixa')">✔ Concluir</button>
+<div class="timer" id="t3">00:00</div>
+<button onclick="startTimer('t3')">⏱ Descanso</button></div>
+
+<div class="card"> <h3>Desenvolvimento</h3>
+<iframe src="https://www.youtube.com/embed/qEwKCR5JCog" allowfullscreen></iframe>
+<input placeholder="Carga (kg)"><input placeholder="Séries">
+<button onclick="toggleDone(this,'Desenvolvimento')">✔ Concluir</button>
+<div class="timer" id="t4">00:00</div>
+<button onclick="startTimer('t4')">⏱ Descanso</button></div>
+
+<div class="card"> <h3>Elevação Lateral</h3>
+<iframe src="https://www.youtube.com/embed/3VcKaXpzqRo" allowfullscreen></iframe>
+<input placeholder="Carga (kg)"><input placeholder="Séries">
+<button onclick="toggleDone(this,'Elevação Lateral')">✔ Concluir</button>
+<div class="timer" id="t5">00:00</div>
+<button onclick="startTimer('t5')">⏱ Descanso</button></div>
+
+<div class="card"> <h3>Rosca Direta</h3>
+<iframe src="https://www.youtube.com/embed/kwG2ipFRgfo" allowfullscreen></iframe>
+<input placeholder="Carga (kg)"><input placeholder="Séries">
+<button onclick="toggleDone(this,'Rosca Direta')">✔ Concluir</button>
+<div class="timer" id="t6">00:00</div>
+<button onclick="startTimer('t6')">⏱ Descanso</button></div>
+
+<div class="card"> <h3>Rosca Alternada</h3>
+<iframe src="https://www.youtube.com/embed/sAq_ocpRh_I" allowfullscreen></iframe>
+<input placeholder="Carga (kg)"><input placeholder="Séries">
+<button onclick="toggleDone(this,'Rosca Alternada')">✔ Concluir</button>
+<div class="timer" id="t7">00:00</div>
+<button onclick="startTimer('t7')">⏱ Descanso</button></div>
+
+<div class="card"> <h3>Rosca Martelo</h3>
+<iframe src="https://www.youtube.com/embed/zC3nLlEvin4" allowfullscreen></iframe>
+<input placeholder="Carga (kg)"><input placeholder="Séries">
+<button onclick="toggleDone(this,'Rosca Martelo')">✔ Concluir</button>
+<div class="timer" id="t8">00:00</div>
+<button onclick="startTimer('t8')">⏱ Descanso</button></div>
+
+</div>
+</div>
+
+<!-- TREINO B -->
+<div id="treinoB" class="screen">
+<button class="back" onclick="openScreen('menu')">⬅ Voltar</button>
+<div class="treino"><h2>Treino B — Peito + Tríceps</h2>
+
+<div class="card"><h3>Supino Reto</h3><iframe src="https://www.youtube.com/embed/rT7DgCr-3pg" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Supino Reto')">✔ Concluir</button><div class="timer" id="t9">00:00</div><button onclick="startTimer('t9')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Supino Inclinado</h3><iframe src="https://www.youtube.com/embed/8iPEnn-ltC8" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Supino Inclinado')">✔ Concluir</button><div class="timer" id="t10">00:00</div><button onclick="startTimer('t10')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Crucifixo</h3><iframe src="https://www.youtube.com/embed/eozdVDA78K0" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Crucifixo')">✔ Concluir</button><div class="timer" id="t11">00:00</div><button onclick="startTimer('t11')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Crossover</h3><iframe src="https://www.youtube.com/embed/taI4XduLpTk" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Crossover')">✔ Concluir</button><div class="timer" id="t12">00:00</div><button onclick="startTimer('t12')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Tríceps Corda</h3><iframe src="https://www.youtube.com/embed/vB5OHsJ3EME" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Tríceps Corda')">✔ Concluir</button><div class="timer" id="t13">00:00</div><button onclick="startTimer('t13')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Tríceps Testa</h3><iframe src="https://www.youtube.com/embed/d_KZxkY_0cM" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Tríceps Testa')">✔ Concluir</button><div class="timer" id="t14">00:00</div><button onclick="startTimer('t14')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Mergulho Banco</h3><iframe src="https://www.youtube.com/embed/jox1rb5krQI" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Mergulho Banco')">✔ Concluir</button><div class="timer" id="t15">00:00</div><button onclick="startTimer('t15')">⏱ Descanso</button></div>
+
+</div></div>
+
+<!-- TREINO C -->
+<div id="treinoC" class="screen">
+<button class="back" onclick="openScreen('menu')">⬅ Voltar</button>
+<div class="treino"><h2>Treino C — Pernas</h2>
+
+<div class="card"><h3>Agachamento Livre</h3><iframe src="https://www.youtube.com/embed/aclHkVaku9U" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Agachamento Livre')">✔ Concluir</button><div class="timer" id="t16">00:00</div><button onclick="startTimer('t16')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Leg Press</h3><iframe src="https://www.youtube.com/embed/IZxyjW7MPJQ" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Leg Press')">✔ Concluir</button><div class="timer" id="t17">00:00</div><button onclick="startTimer('t17')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Cadeira Extensora</h3><iframe src="https://www.youtube.com/embed/YyvSfVjQeL0" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Cadeira Extensora')">✔ Concluir</button><div class="timer" id="t18">00:00</div><button onclick="startTimer('t18')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Cadeira Flexora</h3><iframe src="https://www.youtube.com/embed/1Tq3QdYUuHs" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Cadeira Flexora')">✔ Concluir</button><div class="timer" id="t19">00:00</div><button onclick="startTimer('t19')">⏱ Descanso</button></div>
+
+<div class="card"><h3>Panturrilha em Pé</h3><iframe src="https://www.youtube.com/embed/-M4-G8p8fmc" allowfullscreen></iframe><input placeholder="Carga (kg)"><input placeholder="Séries"><button onclick="toggleDone(this,'Panturrilha em Pé')">✔ Concluir</button><div class="timer" id="t20">00:00</div><button onclick="startTimer('t20')">⏱ Descanso</button></div>
+
+</div></div>
+
+<!-- CALENDÁRIO -->
+<div id="calendario" class="screen">
+<button class="back" onclick="openScreen('menu')">⬅ Voltar</button>
+<div class="treino">
+<h2>📅 Semana</h2>
+<div class="week">
+<div class="day">Seg<br>A</div><div class="day">Ter<br>B</div><div class="day">Qua<br>C</div>
+<div class="day">Qui<br>A</div><div class="day">Sex<br>B</div><div class="day">Sáb<br>C</div>
+<div class="day">Dom<br>Off</div>
+</div>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="screen">
+<button class="back" onclick="openScreen('menu')">⬅ Voltar</button>
+<div class="dashboard">
+<h2>📊 Histórico</h2>
+<div id="log"></div>
+</div>
+</div>
+
 </div>
 
 <script>
-function abrirTreino(letra) {
-  document.getElementById('home').style.display = 'none';
-  document.querySelectorAll('.treino').forEach(t => t.style.display = 'none');
-  document.getElementById('treino' + letra).style.display = 'block';
+function openScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function openTreino(t){ openScreen('treino'+t); }
+
+function toggleDone(btn,ex){
+  btn.classList.toggle('done');
+  const log = JSON.parse(localStorage.getItem('log')||'[]');
+  if(btn.classList.contains('done')){
+    log.push({ex,date:new Date().toLocaleDateString()});
+  } else {
+    const i = log.findIndex(l=>l.ex===ex);
+    if(i>=0) log.splice(i,1);
+  }
+  localStorage.setItem('log',JSON.stringify(log));
+  renderLog();
 }
 
-function startTimer(btn) {
-  const card = btn.closest('.card');
-  const timer = card.querySelector('.timer');
-  let tempo = 60;
-  clearInterval(card._interval);
-
-  card._interval = setInterval(() => {
-    const min = String(Math.floor(tempo / 60)).padStart(2,'0');
-    const sec = String(tempo % 60).padStart(2,'0');
-    timer.textContent = `${min}:${sec}`;
-    tempo--;
-    if (tempo < 0) clearInterval(card._interval);
-  }, 1000);
+function renderLog(){
+  const log = JSON.parse(localStorage.getItem('log')||'[]');
+  const div = document.getElementById('log');
+  div.innerHTML = log.map(l=>`<p>✔ ${l.ex} - ${l.date}</p>`).join('');
 }
+renderLog();
 
-function toggleDone(btn) {
-  const card = btn.closest('.card');
-  card.classList.toggle('done');
+function startTimer(id){
+  let t=60;
+  const el=document.getElementById(id);
+  const int=setInterval(()=>{
+    el.innerText=`00:${String(t).padStart(2,'0')}`;
+    t--;
+    if(t<0) clearInterval(int);
+  },1000);
 }
-
-// Registrar histórico simples
-window.addEventListener('beforeunload', () => {
-  const done = [...document.querySelectorAll('.done')].map(c => c.dataset.ex);
-  localStorage.setItem('treino_' + new Date().toDateString(), JSON.stringify(done));
-});
 </script>
 </body>
 </html>
