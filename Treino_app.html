@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meu Treino</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Arial;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+.container {
+  padding: 16px;
+  max-width: 900px;
+  margin: auto;
+}
+h1 { text-align: center; color: #38bdf8; }
+h2 { color: #facc15; }
+
+.treino, .dashboard, .timerBox {
+  background: #1e293b;
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 12px;
+  margin: 12px 0;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background: #22c55e;
+  border: none;
+  border-radius: 10px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.timer {
+  font-size: 28px;
+  text-align: center;
+  margin: 10px 0;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>🏋️ Meu App de Treino</h1>
+
+<div class="dashboard" id="dashboard"></div>
+
+<!-- TREINO A -->
+<div class="treino">
+<h2>Treino A — Ombro + Costas + Bíceps</h2>
+
+<div class="card"><h3>Puxada na Frente</h3><img src="https://img.youtube.com/vi/CAwf7n6Luuc/hqdefault.jpg"><button onclick="concluir('Puxada na Frente')">✔ Concluir</button></div>
+<div class="card"><h3>Remada Curvada</h3><img src="https://img.youtube.com/vi/GZbfZ033f74/hqdefault.jpg"><button onclick="concluir('Remada Curvada')">✔ Concluir</button></div>
+<div class="card"><h3>Remada Baixa</h3><img src="https://img.youtube.com/vi/roCP6wCXPqo/hqdefault.jpg"><button onclick="concluir('Remada Baixa')">✔ Concluir</button></div>
+<div class="card"><h3>Desenvolvimento</h3><img src="https://img.youtube.com/vi/qEwKCR5JCog/hqdefault.jpg"><button onclick="concluir('Desenvolvimento')">✔ Concluir</button></div>
+<div class="card"><h3>Elevação Lateral</h3><img src="https://img.youtube.com/vi/3VcKaXpzqRo/hqdefault.jpg"><button onclick="concluir('Elevação Lateral')">✔ Concluir</button></div>
+<div class="card"><h3>Rosca Direta</h3><img src="https://img.youtube.com/vi/kwG2ipFRgfo/hqdefault.jpg"><button onclick="concluir('Rosca Direta')">✔ Concluir</button></div>
+<div class="card"><h3>Rosca Alternada</h3><img src="https://img.youtube.com/vi/sAq_ocpRh_I/hqdefault.jpg"><button onclick="concluir('Rosca Alternada')">✔ Concluir</button></div>
+<div class="card"><h3>Rosca Martelo</h3><img src="https://img.youtube.com/vi/zC3nLlEvin4/hqdefault.jpg"><button onclick="concluir('Rosca Martelo')">✔ Concluir</button></div>
+
+</div>
+
+<!-- TREINO B -->
+<div class="treino">
+<h2>Treino B — Peito + Tríceps</h2>
+
+<div class="card"><h3>Supino Reto</h3><img src="https://img.youtube.com/vi/rT7DgCr-3pg/hqdefault.jpg"><button onclick="concluir('Supino Reto')">✔ Concluir</button></div>
+<div class="card"><h3>Supino Inclinado</h3><img src="https://img.youtube.com/vi/8iPEnn-ltC8/hqdefault.jpg"><button onclick="concluir('Supino Inclinado')">✔ Concluir</button></div>
+<div class="card"><h3>Crucifixo</h3><img src="https://img.youtube.com/vi/eozdVDA78K0/hqdefault.jpg"><button onclick="concluir('Crucifixo')">✔ Concluir</button></div>
+<div class="card"><h3>Crossover</h3><img src="https://img.youtube.com/vi/taI4XduLpTk/hqdefault.jpg"><button onclick="concluir('Crossover')">✔ Concluir</button></div>
+<div class="card"><h3>Tríceps Corda</h3><img src="https://img.youtube.com/vi/vB5OHsJ3EME/hqdefault.jpg"><button onclick="concluir('Tríceps Corda')">✔ Concluir</button></div>
+<div class="card"><h3>Tríceps Testa</h3><img src="https://img.youtube.com/vi/d_KZxkY_0cM/hqdefault.jpg"><button onclick="concluir('Tríceps Testa')">✔ Concluir</button></div>
+<div class="card"><h3>Mergulho Banco</h3><img src="https://img.youtube.com/vi/jox1rb5krQI/hqdefault.jpg"><button onclick="concluir('Mergulho Banco')">✔ Concluir</button></div>
+
+</div>
+
+<!-- TREINO C -->
+<div class="treino">
+<h2>Treino C — P
