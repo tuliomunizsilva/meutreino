@@ -1,185 +1,177 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Meu Treino</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meu Treino</title>
 
-<style>
-:root {
-  --bg-main: #111827;
-  --bg-card: #1f2937;
-  --text: #f9fafb;
-  --primary: #f97316;
-  --secondary: #22c55e;
-  --accent: #38bdf8;
-}
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
 
-* { box-sizing: border-box; }
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, Arial;
+      background: linear-gradient(180deg, #020617, #0f172a);
+      color: #f1f5f9;
+    }
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Arial;
-  background: var(--bg-main);
-  color: var(--text);
-}
+    .container {
+      padding: 16px;
+      max-width: 900px;
+      margin: auto;
+    }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 16px;
-}
+    h1 {
+      text-align: center;
+      color: #38bdf8;
+    }
 
-header {
-  text-align: center;
-  font-size: 26px;
-  color: var(--primary);
-  margin-bottom: 16px;
-  font-weight: bold;
-}
+    .home {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-.dashboard {
-  background: var(--bg-card);
-  padding: 16px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-}
+    .treino-btn {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border: none;
+      padding: 16px;
+      border-radius: 18px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #022c22;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,.4);
+    }
 
-.treino {
-  background: var(--bg-card);
-  padding: 16px;
-  border-radius: 16px;
-  margin-bottom: 24px;
-}
+    .treino {
+      display: none;
+      margin-top: 20px;
+    }
 
-.card {
-  background: #0f172a;
-  border-radius: 14px;
-  padding: 14px;
-  margin: 14px 0;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-}
+    .card {
+      background: #1e293b;
+      padding: 14px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 16px rgba(0,0,0,.4);
+    }
 
-.card h3 {
-  color: var(--accent);
-  margin-bottom: 6px;
-}
+    .card h3 {
+      margin: 6px 0;
+    }
 
-iframe {
-  width: 100%;
-  aspect-ratio: 16/9;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
+    iframe {
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+    }
 
-.inputs {
-  display: flex;
-  gap: 8px;
-}
+    .row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
 
-input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-}
+    .btn {
+      flex: 1;
+      background: #22c55e;
+      border: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-button {
-  width: 100%;
-  padding: 10px;
-  background: var(--secondary);
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  margin-top: 8px;
-}
-</style>
+    .btn.secondary {
+      background: #475569;
+      color: white;
+    }
+
+    .timer {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    .done {
+      opacity: 0.5;
+      border: 2px solid #22c55e;
+    }
+  </style>
 </head>
 
 <body>
 <div class="container">
-<header>🏋️ Meu Treino</header>
+  <h1>🏋️ Meu Treino</h1>
 
-<div class="dashboard" id="dashboard"></div>
-<div id="treinos"></div>
+  <!-- Tela inicial -->
+  <div id="home" class="home">
+    <button class="treino-btn" onclick="abrirTreino('A')">Treino A - Costas / Bíceps</button>
+    <button class="treino-btn" onclick="abrirTreino('B')">Treino B - Peito / Tríceps</button>
+    <button class="treino-btn" onclick="abrirTreino('C')">Treino C - Pernas</button>
+  </div>
+
+  <!-- Treino A -->
+  <div id="treinoA" class="treino">
+    <h2>Treino A</h2>
+
+    <div class="card" data-ex="Puxada na Frente">
+      <h3>Puxada na Frente</h3>
+      <iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" allowfullscreen></iframe>
+      <div class="timer">00:00</div>
+      <div class="row">
+        <button class="btn" onclick="startTimer(this)">⏱ Descanso</button>
+        <button class="btn secondary" onclick="toggleDone(this)">✔ Feito</button>
+      </div>
+    </div>
+
+    <div class="card" data-ex="Remada Curvada">
+      <h3>Remada Curvada</h3>
+      <iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen></iframe>
+      <div class="timer">00:00</div>
+      <div class="row">
+        <button class="btn" onclick="startTimer(this)">⏱ Descanso</button>
+        <button class="btn secondary" onclick="toggleDone(this)">✔ Feito</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-const treinos = {
-  "Treino A — Ombro + Costas + Bíceps": [
-    ["Puxada na Frente","CAwf7n6Luuc"],
-    ["Remada Curvada","GZbfZ033f74"],
-    ["Remada Baixa","roCP6wCXPqo"],
-    ["Desenvolvimento","qEwKCR5JCog"],
-    ["Elevação Lateral","3VcKaXpzqRo"],
-    ["Rosca Direta","kwG2ipFRgfo"],
-    ["Rosca Alternada","sAq_ocpRh_I"],
-    ["Rosca Martelo","zC3nLlEvin4"]
-  ],
-  "Treino B — Peito + Tríceps": [
-    ["Supino Reto","rT7DgCr-3pg"],
-    ["Supino Inclinado","8iPEnn-ltC8"],
-    ["Crucifixo","eozdVDA78K0"],
-    ["Crossover","taI4XduLpTk"],
-    ["Tríceps Corda","vB5OHsJ3EME"],
-    ["Tríceps Testa","d_KZxkY_0cM"],
-    ["Mergulho Banco","jox1rb5krQI"]
-  ],
-  "Treino C — Pernas": [
-    ["Agachamento Livre","SW_C1A-rejs"],
-    ["Leg Press","IZxyjW7MPJQ"],
-    ["Cadeira Extensora","YyvSfVjQeL0"],
-    ["Mesa Flexora","1Tq3QdYUuHs"],
-    ["Panturrilha em Pé","YMmgqO8Jo-k"]
-  ]
-};
-
-let historico = JSON.parse(localStorage.getItem("historico") || "{}");
-let hoje = new Date().toISOString().split("T")[0];
-
-function salvar(nome, series, carga) {
-  if (!historico[hoje]) historico[hoje] = [];
-  historico[hoje].push({ nome, series, carga });
-  localStorage.setItem("historico", JSON.stringify(historico));
-  render();
+function abrirTreino(letra) {
+  document.getElementById('home').style.display = 'none';
+  document.querySelectorAll('.treino').forEach(t => t.style.display = 'none');
+  document.getElementById('treino' + letra).style.display = 'block';
 }
 
-function render() {
-  let treinosDiv = document.getElementById("treinos");
-  treinosDiv.innerHTML = "";
+function startTimer(btn) {
+  const card = btn.closest('.card');
+  const timer = card.querySelector('.timer');
+  let tempo = 60;
+  clearInterval(card._interval);
 
-  for (let [titulo, lista] of Object.entries(treinos)) {
-    let bloco = `<div class="treino"><h2>${titulo}</h2>`;
-    lista.forEach(([nome, video]) => {
-      bloco += `
-        <div class="card">
-          <h3>${nome}</h3>
-          <iframe src="https://www.youtube.com/embed/${video}" allowfullscreen></iframe>
-          <div class="inputs">
-            <input placeholder="Séries" id="s-${nome}">
-            <input placeholder="Carga (kg)" id="c-${nome}">
-          </div>
-          <button onclick="salvar('${nome}', 
-            document.getElementById('s-${nome}').value, 
-            document.getElementById('c-${nome}').value)">
-            ✔ Registrar exercício
-          </button>
-        </div>`;
-    });
-    bloco += `</div>`;
-    treinosDiv.innerHTML += bloco;
-  }
-
-  let dias = Object.keys(historico).length;
-  let total = Object.values(historico).flat().length;
-
-  document.getElementById("dashboard").innerHTML = `
-    <h2>📊 Dashboard</h2>
-    <p>Dias registrados: <strong>${dias}</strong></p>
-    <p>Exercícios registrados: <strong>${total}</strong></p>`;
+  card._interval = setInterval(() => {
+    const min = String(Math.floor(tempo / 60)).padStart(2,'0');
+    const sec = String(tempo % 60).padStart(2,'0');
+    timer.textContent = `${min}:${sec}`;
+    tempo--;
+    if (tempo < 0) clearInterval(card._interval);
+  }, 1000);
 }
 
-render();
+function toggleDone(btn) {
+  const card = btn.closest('.card');
+  card.classList.toggle('done');
+}
+
+// Registrar histórico simples
+window.addEventListener('beforeunload', () => {
+  const done = [...document.querySelectorAll('.done')].map(c => c.dataset.ex);
+  localStorage.setItem('treino_' + new Date().toDateString(), JSON.stringify(done));
+});
 </script>
 </body>
 </html>
