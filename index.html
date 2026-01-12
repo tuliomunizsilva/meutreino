@@ -1,143 +1,232 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Meu Treino</title>
-
-<link rel="manifest" href="data:application/json,{
-  &quot;name&quot;:&quot;Meu Treino&quot;,
-  &quot;short_name&quot;:&quot;Treino&quot;,
-  &quot;start_url&quot;:&quot;.&quot;,
-  &quot;display&quot;:&quot;standalone&quot;,
-  &quot;background_color&quot;:&quot;#0f172a&quot;,
-  &quot;theme_color&quot;:&quot;#0f172a&quot;
-}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App de Treino Profissional</title>
 
 <style>
-body {
+/* --- Paleta de Cores Profissional --- */
+:root {
+  --bg-main: #1D1F29;
+  --bg-card: #2A2C36;
+  --text-primary: #F0F4F8;
+  --primary-btn: #FF5722;
+  --secondary-btn: #00E676;
+  --accent: #FFC107;
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* Reset básico */
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Arial;
-  background: #0f172a;
-  color: #f1f5f9;
+  padding: 0;
+  box-sizing: border-box;
 }
-.container { padding: 16px; max-width: 900px; margin: auto; }
-h1 { text-align: center; color: #38bdf8; }
-h2 { color: #facc15; }
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  padding-bottom: 80px;
+}
 
-.treino, .dashboard {
-  background: #1e293b;
+/* Container principal */
+.container {
+  max-width: 900px;
+  margin: auto;
   padding: 16px;
-  border-radius: 16px;
-  margin-bottom: 20px;
 }
 
-.card {
-  background: #0f172a;
+/* Cabeçalho app */
+header {
+  text-align: center;
+  padding: 20px 0;
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+/* Abas de navegação */
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 18px;
+}
+.tab-btn {
+  flex: 1;
   padding: 12px;
-  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--bg-card);
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+.tab-btn.active {
+  background: var(--primary-btn);
+  color: #000;
+  box-shadow: 0 4px 10px var(--shadow);
+}
+
+/* Cards de exercício */
+.card {
+  background: var(--bg-card);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--shadow);
+  padding: 18px;
   margin: 12px 0;
 }
-
-iframe {
+.card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+.card iframe {
   width: 100%;
   aspect-ratio: 16/9;
-  border-radius: 12px;
+  border-radius: 10px;
+  margin: 8px 0;
 }
-
-input {
-  width: 48%;
+.card input {
+  width: 47%;
   padding: 8px;
   border-radius: 8px;
   border: none;
-  margin: 4px 1%;
+  margin-right: 6px;
 }
-
-button {
+.card button {
   width: 100%;
   padding: 10px;
-  background: #22c55e;
+  background: var(--secondary-btn);
   border: none;
   border-radius: 10px;
-  margin-top: 8px;
   font-weight: bold;
+  color: #000;
+  margin-top: 8px;
 }
 
-.timer {
+/* Dashboard */
+.dashboard {
+  background: var(--bg-card);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--shadow);
+  padding: 18px;
+  margin-bottom: 18px;
   text-align: center;
-  font-size: 24px;
-  margin-top: 10px;
+}
+.dashboard h2 {
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.dashboard p {
+  font-size: 16px;
+  margin: 4px 0;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .card input {
+    width: 100%;
+    margin-bottom: 6px;
+  }
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-<h1>🏋️ Meu Treino</h1>
 
-<div class="dashboard" id="dashboard"></div>
-<div id="treinos"></div>
+<header>🏋️‍♂️ Treinos Profissionais</header>
+
+<div class="tabs">
+  <div class="tab-btn active" onclick="openTab('hoje')">Hoje</div>
+  <div class="tab-btn" onclick="openTab('dashboard')">Dashboard</div>
+</div>
+
+<div id="hoje" class="tab-content"></div>
+<div id="dashboard" class="tab-content" style="display:none"></div>
+
+</div>
 
 <script>
+// --- Dados de treino com vídeos ---
 const treinos = {
-  "Segunda — Ombro + Costas + Bíceps": [
+  "Treino A — Ombro + Costas + Bíceps": [
     ["Puxada na Frente","CAwf7n6Luuc"],
     ["Remada Curvada","GZbfZ033f74"],
     ["Rosca Direta","kwG2ipFRgfo"]
   ],
-  "Quarta — Peito + Tríceps": [
+  "Treino B — Peito + Tríceps": [
     ["Supino Reto","rT7DgCr-3pg"],
     ["Tríceps Corda","vB5OHsJ3EME"]
   ],
-  "Sexta — Pernas": [
+  "Treino C — Pernas": [
     ["Agachamento Livre","SW_C1A-rejs"],
     ["Leg Press","IZxyjW7MPJQ"]
   ]
 };
 
-let dataHoje = new Date().toISOString().split("T")[0];
-let historico = JSON.parse(localStorage.getItem("historico") || "{}");
+// --- Histórico por dia ---
+let historico = JSON.parse(localStorage.getItem("histTreinos") || "{}");
 
-function salvar(nome, serie, carga) {
-  if (!historico[dataHoje]) historico[dataHoje] = [];
-  historico[dataHoje].push({ nome, serie, carga });
-  localStorage.setItem("historico", JSON.stringify(historico));
+// Function: Marcar exercício
+function registrar(nome, series, carga) {
+  const hoje = new Date().toISOString().split("T")[0];
+  if (!historico[hoje]) historico[hoje] = [];
+  historico[hoje].push({ nome, series, carga });
+  localStorage.setItem("histTreinos", JSON.stringify(historico));
   render();
 }
 
-function render() {
-  let total = 0;
-  document.getElementById("treinos").innerHTML = "";
-
-  for (let [dia, exs] of Object.entries(treinos)) {
-    let bloco = `<div class="treino"><h2>${dia}</h2>`;
-    exs.forEach(([nome, vid]) => {
-      bloco += `
-      <div class="card">
-        <h3>${nome}</h3>
-        <iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>
-        <input placeholder="Séries" id="s-${nome}">
-        <input placeholder="Carga (kg)" id="c-${nome}">
-        <button onclick="salvar('${nome}',document.getElementById('s-${nome}').value,document.getElementById('c-${nome}').value)">
-          ✔ Registrar
-        </button>
-      </div>`;
+// Render conteúdo da aba “Hoje”
+function renderHoje() {
+  let html = "";
+  for (let dia in treinos) {
+    html += `<div class="card"><h3>${dia}</h3></div>`;
+    treinos[dia].forEach(([nome, video]) => {
+      html += `
+        <div class="card">
+          <h3>${nome}</h3>
+          <iframe src="https://www.youtube.com/embed/${video}" allowfullscreen></iframe>
+          <input placeholder="Séries" id="s-${nome}">
+          <input placeholder="Carga (kg)" id="c-${nome}">
+          <button onclick="registrar('${nome}', document.getElementById('s-${nome}').value, document.getElementById('c-${nome}').value)">
+            📌 Registrar
+          </button>
+        </div>`;
     });
-    bloco += `</div>`;
-    document.getElementById("treinos").innerHTML += bloco;
   }
-
-  let dias = Object.keys(historico).length;
-  let totalRegs = Object.values(historico).flat().length;
-
-  document.getElementById("dashboard").innerHTML = `
-    <h2>📊 Dashboard</h2>
-    <p>Dias treinados: ${dias}</p>
-    <p>Exercícios registrados: ${totalRegs}</p>
-  `;
+  document.getElementById("hoje").innerHTML = html;
 }
 
-render();
+// Render conteúdo da aba “Dashboard”
+function renderDashboard() {
+  let dash = `<div class="dashboard"><h2>📊 Histórico</h2>`;
+  let dias = Object.keys(historico);
+  if (dias.length === 0) {
+    dash += `<p>Nenhum registro ainda.</p>`;
+  } else {
+    dias.forEach(d => {
+      dash += `<p><strong>${d}</strong>: ${historico[d].length} exercícios</p>`;
+    });
+  }
+  dash += `</div>`;
+  document.getElementById("dashboard").innerHTML = dash;
+}
+
+// Tab navigation
+function openTab(name) {
+  document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(name).style.display = 'block';
+  event.target.classList.add('active');
+  if (name === "dashboard") renderDashboard();
+}
+
+renderHoje();
 </script>
+
 </body>
 </html>
